@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 using System.IO;
+using System.Text.RegularExpressions;
+using System.Linq;
 using UnityEngine;
 
 namespace Cartog.IO
@@ -37,6 +39,15 @@ namespace Cartog.IO
         public void Save(string id, byte[] data)
         {
             File.WriteAllBytes(Path.Join(directory, id), data);
+        }
+
+        public IEnumerable<string> ListAvailable(Regex idPattern)
+        {
+            return Directory
+                .GetFiles(directory)
+                .Select(path => Path.GetFileName(path))
+                .Where(fileName => idPattern.IsMatch(fileName));
+               
         }
     }
 }

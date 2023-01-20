@@ -29,6 +29,9 @@ public class Test : MonoBehaviour
         }
 
         item.Save(adaptor);
+
+        var legend = new MapLegend(adaptor);
+        Debug.Log(string.Join(",", legend.SeasonItems(0)));
     }
 
     // Update is called once per frame

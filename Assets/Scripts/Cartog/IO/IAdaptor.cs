@@ -1,6 +1,5 @@
-using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
+using System.Text.RegularExpressions;
 
 namespace Cartog.IO
 {
@@ -11,5 +10,12 @@ namespace Cartog.IO
         public byte[] Load(string id);
 
         public void Save(string id, byte[] data);
+
+        /// <summary>
+        /// List all items that match the pattern
+        /// </summary>
+        /// <param name="idPattern">Pattern to match</param>
+        /// <returns></returns>
+        public IEnumerable<string> ListAvailable(Regex idPattern);
     }
 }

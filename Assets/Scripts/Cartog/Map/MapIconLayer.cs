@@ -31,10 +31,16 @@ namespace Cartog.Map
             this.iconLayerId = iconLayerId;
         }
 
-        public uint getSeasonValue(byte seasonId)
+        public uint GetSeasonValue(byte seasonId)
         {
             if (seasonId >= 8) throw new System.ArgumentException($"Maxium season allowed is 7 (got {seasonId})");
             return (uint)iconLayerId << (8 * seasonId);
+        }
+
+        public bool UsedInSeason(byte seasonId)
+        {
+            if (seasonId >= 8) throw new System.ArgumentException($"Maxium season allowed is 7 (got {seasonId})");
+            return (iconLayerId & seasonLayers) != 0;
         }
     }
 }
