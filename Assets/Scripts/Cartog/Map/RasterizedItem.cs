@@ -47,6 +47,11 @@ namespace Cartog.Map
         public Texture2D texture { get; private set; }
         public RasterizedMetadata metadata { get; private set; }
 
+        /// <summary>
+        /// If changes have been made that have not been saved
+        /// </summary>
+        public bool Dirty { get; private set; }
+
         public RasterizedItem(string sourceId, byte iconLayerId)
         {
             this.sourceId = sourceId;
