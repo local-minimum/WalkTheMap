@@ -5,31 +5,31 @@ using UnityEngine;
 using MessagePack;
 using Cartog.IO;
 
-namespace Cartog.Map
+namespace Cartog.Map.Raster
 {
     public class RasterizedItem
     {
-        static string MetadataPath(string itemId) => $"raster-item.{itemId}.data";
+        static string MetadataFileName(string itemId) => $"raster-item.{itemId}.data";
 
-        static string PngPath(string itemId) => $"raster-item.{itemId}.png";
+        static string PngFileName(string itemId) => $"raster-item.{itemId}.png";
 
-        private static Regex idPattern = new Regex(@"^raster-item\.(.*)\.png$");
+        private static Regex idPattern = new Regex(@"^raster-item\.(.*)\.data$");
 
         private static string FileNameToItemId(string fileName) => 
             idPattern.Matches(fileName).First().Groups.Skip(1).First().Value;
 
         public static bool Exists(IAdaptor adaptor, string id)
         {
-            return adaptor.Exists(MetadataPath(id));
+            return adaptor.Exists(MetadataFileName(id));
         }
 
         public static RasterizedItem Load(IAdaptor adaptor, string id)
         {
-            byte[] rawMetadata = adaptor.Load(MetadataPath(id));
+            byte[] rawMetadata = adaptor.Load(MetadataFileName(id));
 
-            if (adaptor.Exists(PngPath(id)))
+            if (adaptor.Exists(PngFileName(id)))
             {
-                byte[] texturePng = adaptor.Load(PngPath(id));
+                byte[] texturePng = adaptor.Load(PngFileName(id));
 
                 return new RasterizedItem(id, rawMetadata, texturePng);
 
@@ -52,10 +52,10 @@ namespace Cartog.Map
         /// </summary>
         public bool Dirty { get; private set; }
 
-        public RasterizedItem(string sourceId, byte iconLayerId)
+        public RasterizedItem(string sourceId, string rasterId, byte iconLayerId)
         {
             this.sourceId = sourceId;
-            metadata = new RasterizedMetadata(sourceId, iconLayerId);
+            metadata = new RasterizedMetadata(sourceId, rasterId, iconLayerId);
             texture = new Texture2D(64, 64);
         }
 
@@ -87,8 +87,8 @@ namespace Cartog.Map
             var metadataBytes = MessagePackSerializer.Serialize(metadata);
             var pngBytes = texture.EncodeToPNG();
 
-            adaptor.Save(MetadataPath(sourceId), metadataBytes);
-            adaptor.Save(PngPath(sourceId), pngBytes);
+            adaptor.Save(MetadataFileName(sourceId), metadataBytes);
+            adaptor.Save(PngFileName(sourceId), pngBytes);
         }
 
         public override string ToString()

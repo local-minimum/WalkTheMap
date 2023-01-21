@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using Cartog.Map;
+using Cartog.Map.Raster;
 using Cartog.IO;
 
 public class Test : MonoBehaviour

@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Cartog.IO;
+using Cartog.Map.Raster;
 
 
 namespace Cartog.Map
