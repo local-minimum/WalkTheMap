@@ -40,16 +40,17 @@ namespace Cartog.Map.Raster
             this.rotation = rotation;
         }
 
-        public IEnumerable<Vector2> GetCoordinates(Rect area, int scale)
+        public IEnumerable<Vector2> GetCoordinates(Rect area, int scale = 1)
         {
+            if (scale < 1) throw new System.ArgumentException($"Scale {scale} is less than one");
             //TODO: Make rotation!
 
             int yi = 0;
-            for (var y=area.yMin + baseOffset.y; y<=area.yMax; y+=spacing.y, yi++)
+            for (var y=area.yMin + baseOffset.y; y<=area.yMax; y+=spacing.y * scale, yi++)
             {
                 if (y < area.yMin) continue;
 
-                for (var x=area.xMin + baseOffset.x + (yi % 2 != 0 ? oddRowOffset : 0); x <= area.xMax; x+=spacing.x)
+                for (var x=area.xMin + baseOffset.x + (yi % 2 != 0 ? oddRowOffset : 0); x <= area.xMax; x+=spacing.x * scale)
                 {
                     if (x < area.xMin) continue;
 

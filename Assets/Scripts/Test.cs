@@ -27,18 +27,33 @@ public class Test : MonoBehaviour
     int noise = 8;
     
     Texture2D tex;
+    IAdaptor adaptor;
     
     void Start()
     {
-        var adaptor = new UnityProjectDriveStorage(location);
+        adaptor = new UnityProjectDriveStorage(location);
+
+        //NewEmptySprite();
+        DoLegend();
+
+        tex = new Texture2D(size, size);
+        sr.sprite = Sprite.Create(tex, new Rect(0, 0, size, size), Vector2.one * 0.5f);        
+    }
+
+    void NewEmptySprite()
+    {
+        item = new RasterizedItem("Foo", "Bar", 1);
+        item.Save(adaptor);
+    }
+
+    void DoLegend()
+    {
         var legend = new MapLegend(adaptor);
         Debug.Log(string.Join(",", legend.SeasonItems(0)));
 
-        item = legend.SeasonItems(0).First();
-        tex = new Texture2D(size, size);
-       
-        sr.sprite = Sprite.Create(tex, new Rect(0, 0, size, size), Vector2.one * 0.5f);
+        item = legend.SeasonItems(0).First();        
     }
+
 
     void DrawForrest()
     {
