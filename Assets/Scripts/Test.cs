@@ -23,8 +23,6 @@ public class Test : MonoBehaviour
 
     [SerializeField, Range(30, 80)]
     int spacing = 40;
-    [SerializeField, Range(0, 30)]
-    int noise = 8;
 
     [SerializeField, Range(0, 40)]
     int oddRowOffset = 20;
@@ -68,50 +66,8 @@ public class Test : MonoBehaviour
         var legend = new MapLegend(adaptor);
         Debug.Log(string.Join(",", legend.SeasonItems(0)));
 
-        item = legend.SeasonItems(0).First();        
-    }
-
-
-    void DrawForrest()
-    {
-        int trees = size / spacing + 3;
-        for (int i = 0; i < trees; i++)
-        {
-            for (int j = 0; j < trees; j++)
-            {
-                Blit(
-                    item.texture,
-                    tex,
-                    i * spacing + Random.Range(-noise, noise) + (j % 2 == 0 ? spacing / 2 : 0),
-                    j * spacing + Random.Range(-noise, noise)
-                    );
-            }
-        }
-    }
-
-    void Blit(Texture2D source, Texture2D target, int centerX, int centerY)
-    {
-        // Debug.Log($"({centerX}, {centerY})");
-        int halfSourceHeight = source.height / 2;
-        int halfSourceWidth = source.width / 2;
-
-        for (int sourceX = 0, sourceWidth = source.width; sourceX < sourceWidth; sourceX++)
-        {
-            int targetX = centerX - halfSourceWidth + sourceX;
-
-            if (targetX < 0 || targetX >= target.width) continue;
-
-            for (int sourceY = 0, sourceHeight = source.height; sourceY < sourceHeight; sourceY++)
-            {
-                int targetY = centerY - halfSourceHeight + sourceY;
-                if (targetY < 0 || targetY >= target.height) continue;
-
-                var color = source.GetPixel(sourceX, sourceY);
-                if (color.a == 0) continue;
-
-                target.SetPixel(targetX, targetY, color);
-            }
-        }
+        item = legend.SeasonItems(0).First();
+        item.MutateMetadata(rasterPositionNoise: 0.1f);
     }
     
     void Fill(Color32 color)
@@ -128,7 +84,6 @@ public class Test : MonoBehaviour
     private void Update()
     {
         Fill(Color.gray);
-        //DrawForrest();
 
         raster.DrawItemOn(item, tex);
         raster.DrawRasterOn(tex, Color.magenta, rasterScale, Raster.RasterMarker.Plus);

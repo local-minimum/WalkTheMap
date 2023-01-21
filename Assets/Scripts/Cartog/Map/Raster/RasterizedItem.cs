@@ -52,6 +52,20 @@ namespace Cartog.Map.Raster
         /// </summary>
         public bool Dirty { get; private set; }
 
+        public void MutateMetadata(float? rasterPositionNoise = null, int? rasterScale = null)
+        {
+            metadata = new RasterizedMetadata(
+                metadata.nameIdentifier,
+                metadata.iconLayer,
+                metadata.rasterId,
+                metadata.drawPriority,
+                rasterPositionNoise ?? metadata.rasterPositionNoise,
+                rasterScale ?? metadata.rasterScale,
+                metadata.legendPriority
+            );
+            Dirty = true;
+        }
+
         public RasterizedItem(string sourceId, string rasterId, byte iconLayerId)
         {
             this.sourceId = sourceId;

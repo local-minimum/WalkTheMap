@@ -7,6 +7,8 @@ namespace Cartog.Map.Raster
 {
     public class Raster
     {
+        public enum RasterOrigin { NorthWest, NorthEast, SouthWest, SouthEast };
+
         struct Coordinates
         {
             public readonly int x;
@@ -25,18 +27,46 @@ namespace Cartog.Map.Raster
         Dictionary<int, Coordinates[]> coordinatesCache = new Dictionary<int, Coordinates[]>();
 
         Rect cachedRect;
+        RasterOrigin origin;
 
-        public Raster(IRasterFunction rasterFunction)
+        public Raster(IRasterFunction rasterFunction, RasterOrigin origin = RasterOrigin.NorthEast)
         {
             this.rasterFunction = rasterFunction;
+            this.origin = origin;
+        }
+
+        Vector2 GetSortOrigin(Rect rect)
+        {
+            switch (origin)
+            {
+                case RasterOrigin.NorthWest:
+                    return new Vector2(rect.xMin, rect.yMax);
+                case RasterOrigin.NorthEast:
+                    return new Vector2(rect.xMax, rect.yMax);
+                case RasterOrigin.SouthWest:
+                    return new Vector2(rect.xMin, rect.yMin);
+                case RasterOrigin.SouthEast:
+                    return new Vector2(rect.xMax, rect.yMin);
+                default:
+                    return rect.center;
+            }
         }
 
         void UpdateNodes(Rect rect, int scale)
         {
             if (!NeedsUpdate(rect, scale)) return;
 
-            cache[scale] = rasterFunction.GetCoordinates(rect, scale).ToArray();
-            coordinatesCache[scale] = cache[scale].Select(vec => new Coordinates(vec)).ToArray();
+            var originPos = GetSortOrigin(rect);
+
+            cache[scale] = rasterFunction
+                .GetCoordinates(rect, scale)
+                .OrderBy(pos => Vector2.SqrMagnitude(new Vector2(0.5f * (pos.x - originPos.x), pos.y - originPos.y)))
+                .ToArray();
+
+            coordinatesCache[scale] = cache[scale]
+                .Select(vec => new Coordinates(vec))
+                .ToArray();
+
             cachedRect = rect;
         }
 
@@ -108,8 +138,11 @@ namespace Cartog.Map.Raster
                 var coord = coordinates[i];
                 if (mask == null || mask.GetPixel(coord.x, coord.y).a != 0)
                 {
-                    var noise = Random.Range(-item.metadata.rasterPositionNoise, item.metadata.rasterPositionNoise);
-                    Blit(item.texture, tex, new Coordinates(nodes[i] - offset + noise * offset));
+                    var noise = new Vector2(
+                        Random.Range(-item.metadata.rasterPositionNoise, item.metadata.rasterPositionNoise) * offset.x,
+                        Random.Range(-item.metadata.rasterPositionNoise, item.metadata.rasterPositionNoise) * offset.y
+                    );
+                    Blit(item.texture, tex, new Coordinates(nodes[i] - offset + noise));
                 }                
             }
         }
