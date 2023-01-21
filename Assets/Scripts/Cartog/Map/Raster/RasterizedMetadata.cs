@@ -91,5 +91,21 @@ namespace Cartog.Map.Raster
                 return $"map.icon.{nameIdentifier}";
             }
         }
+
+        public RasterizedMetadata Mutate(
+            string rasterId = null,
+            float? rasterPositionNoise = null,
+            int? rasterScale = null,
+            int? drawPriority = null,
+            int? legendPriority = null
+        ) => new RasterizedMetadata(
+                nameIdentifier,
+                iconLayer,
+                rasterId ?? this.rasterId,
+                drawPriority ?? this.drawPriority,
+                rasterPositionNoise ?? this.rasterPositionNoise,
+                rasterScale ?? this.rasterScale,
+                legendPriority ?? this.legendPriority
+        );
     }
 }

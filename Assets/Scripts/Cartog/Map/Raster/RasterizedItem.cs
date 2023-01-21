@@ -52,17 +52,22 @@ namespace Cartog.Map.Raster
         /// </summary>
         public bool Dirty { get; private set; }
 
-        public void MutateMetadata(float? rasterPositionNoise = null, int? rasterScale = null)
+        public void MutateMetadata(
+            string rasterId = null, 
+            float? rasterPositionNoise = null, 
+            int? rasterScale = null,
+            int? drawPriority = null,
+            int? legendPriority = null
+        )
         {
-            metadata = new RasterizedMetadata(
-                metadata.nameIdentifier,
-                metadata.iconLayer,
-                metadata.rasterId,
-                metadata.drawPriority,
-                rasterPositionNoise ?? metadata.rasterPositionNoise,
-                rasterScale ?? metadata.rasterScale,
-                metadata.legendPriority
+            metadata = metadata.Mutate(
+                rasterId,
+                rasterPositionNoise,
+                rasterScale,
+                drawPriority,
+                legendPriority
             );
+            
             Dirty = true;
         }
 

@@ -67,7 +67,7 @@ public class Test : MonoBehaviour
         Debug.Log(string.Join(",", legend.SeasonItems(0)));
 
         item = legend.SeasonItems(0).First();
-        item.MutateMetadata(rasterPositionNoise: 0.1f);
+        item.MutateMetadata(rasterPositionNoise: 0.1f);        
     }
     
     void Fill(Color32 color)
