@@ -176,7 +176,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 5
+  orthographic size: 2.5
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -294,8 +294,10 @@ MonoBehaviour:
   - TestMap
   sr: {fileID: 1308181564}
   size: 500
-  spacing: 68
+  spacing: 42
   noise: 11
+  oddRowOffset: 21
+  rasterScale: 1
 --- !u!4 &1308181566
 Transform:
   m_ObjectHideFlags: 0

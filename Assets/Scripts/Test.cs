@@ -25,10 +25,17 @@ public class Test : MonoBehaviour
     int spacing = 40;
     [SerializeField, Range(0, 30)]
     int noise = 8;
+
+    [SerializeField, Range(0, 40)]
+    int oddRowOffset = 20;
+
+    [SerializeField, Range(1, 10)]
+    int rasterScale = 1;
     
     Texture2D tex;
     IAdaptor adaptor;
-    
+    Raster raster;
+
     void Start()
     {
         adaptor = new UnityProjectDriveStorage(location);
@@ -36,14 +43,24 @@ public class Test : MonoBehaviour
         //NewEmptySprite();
         DoLegend();
 
+        InitRaster();
+
         tex = new Texture2D(size, size);
         sr.sprite = Sprite.Create(tex, new Rect(0, 0, size, size), Vector2.one * 0.5f);        
     }
 
     void NewEmptySprite()
     {
-        item = new RasterizedItem("Foo", "Bar", 1);
+        item = new RasterizedItem("Foo2", "Bar", 1);
         item.Save(adaptor);
+    }
+
+
+    void InitRaster()
+    {
+        raster = new Raster(
+            new RasterFunctionParallelogram("Bar", Vector2.one * spacing, oddRowOffset)
+        );
     }
 
     void DoLegend()
@@ -70,8 +87,6 @@ public class Test : MonoBehaviour
                     );
             }
         }
-
-        tex.Apply();
     }
 
     void Blit(Texture2D source, Texture2D target, int centerX, int centerY)
@@ -112,7 +127,12 @@ public class Test : MonoBehaviour
 
     private void Update()
     {
-        Fill(Color.white);
-        DrawForrest();
+        Fill(Color.gray);
+        //DrawForrest();
+
+        raster.DrawItemOn(item, tex);
+        raster.DrawRasterOn(tex, Color.magenta, rasterScale, Raster.RasterMarker.Plus);
+
+        tex.Apply();
     }
 }

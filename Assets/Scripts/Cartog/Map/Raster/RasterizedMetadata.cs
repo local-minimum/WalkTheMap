@@ -39,10 +39,10 @@ namespace Cartog.Map.Raster
         public readonly float rasterPositionNoise;
 
         /// <summary>
-        /// Allows for scaling of connected image
+        /// Scale of raster
         /// </summary>
         [Key(5)]
-        public readonly float imageScale;
+        public readonly int rasterScale;
 
         /// <summary>
         /// Causes legen to present items in certain order
@@ -56,7 +56,7 @@ namespace Cartog.Map.Raster
             iconLayer = new MapIconLayer(0, iconLayerId);
             this.rasterId = rasterId;
             rasterPositionNoise = 0;
-            imageScale = 1;
+            rasterScale = 1;
             legendPriority = 0;
             drawPriority = 0;
         }
@@ -67,7 +67,7 @@ namespace Cartog.Map.Raster
             string rasterId,
             int drawPriority,
             float rasterPositionNoise, 
-            float imageScale, 
+            int rasterScale, 
             int legendPriority
         )
         {
@@ -76,7 +76,7 @@ namespace Cartog.Map.Raster
             this.rasterId = rasterId;
             this.drawPriority = drawPriority;
             this.rasterPositionNoise = rasterPositionNoise;
-            this.imageScale = imageScale;
+            this.rasterScale = rasterScale;
             this.legendPriority = legendPriority;
         }
 
