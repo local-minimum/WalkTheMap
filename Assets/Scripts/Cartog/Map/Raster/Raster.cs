@@ -9,18 +9,6 @@ namespace Cartog.Map.Raster
     {
         public enum RasterOrigin { NorthWest, NorthEast, SouthWest, SouthEast };
 
-        struct Coordinates
-        {
-            public readonly int x;
-            public readonly int y;
-
-            public Coordinates(Vector2 vec)
-            {
-                x = Mathf.RoundToInt(vec.x);
-                y = Mathf.RoundToInt(vec.y);
-            }
-        }
-
         IRasterFunction rasterFunction;
 
         Dictionary<int, Vector2[]> cache = new Dictionary<int, Vector2[]>();
@@ -85,39 +73,19 @@ namespace Cartog.Map.Raster
             var nodes = coordinatesCache[scale];
 
             for (int i = 0; i < nodes.Length; i++)
-            {
+            {                
                 var node = nodes[i];
+                if (node.x < 0 || node.y < 0 || node.x >= tex.width || node.y >= tex.height) continue;
                 tex.SetPixel(node.x, node.y, color);
 
                 switch (marker)
                 {
                     case RasterMarker.Plus:
-                        tex.SetPixel(node.x - 1, node.y, color);
-                        tex.SetPixel(node.x + 1, node.y, color);
-                        tex.SetPixel(node.x, node.y - 1, color);
-                        tex.SetPixel(node.x, node.y + 1, color);
+                        if (node.x - 1 >= 0) tex.SetPixel(node.x - 1, node.y, color);
+                        if (node.x + 1 < tex.width) tex.SetPixel(node.x + 1, node.y, color);
+                        if (node.y - 1 >= 0) tex.SetPixel(node.x, node.y - 1, color);
+                        if (node.y + 1 < tex.height) tex.SetPixel(node.x, node.y + 1, color);
                         break;
-                }
-            }
-        }
-
-        void Blit(Texture2D source, Texture2D target, Coordinates origin)
-        {
-            for (int sourceX = 0, sourceWidth = source.width; sourceX < sourceWidth; sourceX++)
-            {
-                int targetX = origin.x + sourceX;
-
-                if (targetX < 0 || targetX >= target.width) continue;
-
-                for (int sourceY = 0, sourceHeight = source.height; sourceY < sourceHeight; sourceY++)
-                {
-                    int targetY = origin.y + sourceY;
-                    if (targetY < 0 || targetY >= target.height) continue;
-
-                    var color = source.GetPixel(sourceX, sourceY);
-                    if (color.a == 0) continue;
-
-                    target.SetPixel(targetX, targetY, color);
                 }
             }
         }
@@ -142,7 +110,8 @@ namespace Cartog.Map.Raster
                         Random.Range(-item.metadata.rasterPositionNoise, item.metadata.rasterPositionNoise) * offset.x,
                         Random.Range(-item.metadata.rasterPositionNoise, item.metadata.rasterPositionNoise) * offset.y
                     );
-                    Blit(item.texture, tex, new Coordinates(nodes[i] - offset + noise));
+
+                    item.texture.BlitOnto(tex, new Coordinates(nodes[i] - offset + noise));                    
                 }                
             }
         }

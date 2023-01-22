@@ -135,6 +135,7 @@ GameObject:
   - component: {fileID: 129662406}
   - component: {fileID: 129662407}
   - component: {fileID: 129662408}
+  - component: {fileID: 129662409}
   m_Layer: 0
   m_Name: MapMaker
   m_TagString: Untagged
@@ -155,7 +156,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &129662406
 SpriteRenderer:
@@ -223,6 +224,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mapHeight: 500
   mapWidth: 500
+  spacing: 40
+  oddRowOffset: 20
 --- !u!114 &129662408
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -237,6 +240,34 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mapHeight: 500
   mapWidth: 500
+  spacing: 40
+  oddRowOffset: 20
+--- !u!61 &129662409
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 129662404}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 0.0001, y: 0.0001}
+  m_EdgeRadius: 0
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -332,6 +363,7 @@ GameObject:
   - component: {fileID: 1308181566}
   - component: {fileID: 1308181565}
   - component: {fileID: 1308181564}
+  - component: {fileID: 1308181567}
   m_Layer: 0
   m_Name: MapRendering
   m_TagString: Untagged
@@ -398,7 +430,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1308181563}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b1209f8e7cfaaa24e90330950e82ea0f, type: 3}
   m_Name: 
@@ -424,5 +456,21 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1308181567
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1308181563}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3e9273037b62e824192930f1f5f45e27, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  backgroundColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
+  canvas: {fileID: 129662407}
+  location:
+  - TestMap
