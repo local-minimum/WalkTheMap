@@ -3,6 +3,7 @@ using System.Linq;
 using UnityEngine;
 using Cartog.Map;
 using Cartog.Map.Raster;
+using Cartog.Map.IngameEditor;
 using Cartog.IO;
 
 public class Test : MonoBehaviour
@@ -83,7 +84,7 @@ public class Test : MonoBehaviour
 
     private void Update()
     {
-        Fill(Color.gray);
+        tex.Fill(Color.gray);
 
         raster.DrawItemOn(item, tex);
         raster.DrawRasterOn(tex, Color.magenta, rasterScale, Raster.RasterMarker.Plus);
